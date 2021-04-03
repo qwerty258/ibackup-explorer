@@ -9,6 +9,7 @@
 #include <QSqlTableModel>
 #include <QtSql/QSqlDatabase>
 #include <QStandardPaths>
+#include <QOperatingSystemVersion>
 
 QSqlDatabase db;
 QSqlTableModel *model;
@@ -31,7 +32,15 @@ MainWindow::~MainWindow()
 void MainWindow::on_browse_button_clicked()
 {
     QString root_path;
-    QString tmp = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString tmp;
+    switch (QOperatingSystemVersion::currentType()) {
+    case QOperatingSystemVersion::MacOS:
+        tmp = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        break;
+    default:
+        tmp="";
+        break;
+    }
     qDebug() << tmp;
     root_path = QFileDialog::getExistingDirectory(this, tr("Select Backup Location"),tmp);
     qDebug() << root_path;
