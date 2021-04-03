@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QSqlTableModel>
 #include <QtSql/QSqlDatabase>
+#include <QStandardPaths>
 
 QSqlDatabase db;
 QSqlTableModel *model;
@@ -30,7 +31,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_browse_button_clicked()
 {
     QString root_path;
-    root_path = QFileDialog::getExistingDirectory(this, tr("Select Backup Location"));
+    QString tmp = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    qDebug() << tmp;
+    root_path = QFileDialog::getExistingDirectory(this, tr("Select Backup Location"),tmp);
     qDebug() << root_path;
     ui->path_label->setText(root_path);
 }
