@@ -1,13 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QtSql/QSqlQuery>
-#include <QtSql/QSqlRecord>
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
+
+#include <QSqlDatabase>
 #include <QSqlTableModel>
-#include <QtSql/QSqlDatabase>
+#include <QSqlError>
+
 #include <QStandardPaths>
 #include <QOperatingSystemVersion>
 
@@ -27,6 +28,15 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    if(db.isOpen())
+    {
+        if(NULL!=model)
+        {
+            delete model;
+            model=NULL;
+        }
+        db.close();
+    }
 }
 
 void MainWindow::on_browse_button_clicked()
@@ -51,19 +61,45 @@ void MainWindow::on_open_button_clicked()
 {
     QString dbpath = ui->path_label->text() +"/Manifest.db";
     qDebug()<< dbpath;
-    QFileInfo dbfile = QFileInfo(dbpath);
-    if(dbfile.exists() && dbfile.isFile())
+    if(QFileInfo::exists(dbpath))
     {
         if(db.isOpen())
         {
+            if(NULL!=model)
+            {
+                delete model;
+                model=NULL;
+            }
             db.close();
         }
         db.setDatabaseName(dbpath);
-        db.open();
-        model=new QSqlTableModel(NULL,db);
-        model->setTable("Files");
-        model->select();
-        ui->table_view->setModel(model);
+        if(db.open())
+        {
+            model=new QSqlTableModel(NULL,db);
+            model->setTable("Files");
+            if(model->select())
+            {
+                ui->table_view->setModel(model);
+            }
+            else
+            {
+                QMessageBox msgbox;
+                msgbox.setIcon(QMessageBox::Critical);
+                msgbox.setWindowTitle("Error");
+                msgbox.setText(model->lastError().text());
+                msgbox.setStandardButtons(QMessageBox::Ok);
+                msgbox.exec();
+            }
+        }
+        else
+        {
+            QMessageBox msgbox;
+            msgbox.setIcon(QMessageBox::Critical);
+            msgbox.setWindowTitle("Error");
+            msgbox.setText(db.lastError().text());
+            msgbox.setStandardButtons(QMessageBox::Ok);
+            msgbox.exec();
+        }
     }
     else
     {
