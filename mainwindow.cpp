@@ -22,18 +22,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->table_view->setEditTriggers(QTableView::NoEditTriggers);
     ui->table_view->setSortingEnabled(true);
-    db= QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE");
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    if(db.isOpen())
+    if (db.isOpen())
     {
-        if(NULL!=model)
+        if (NULL != model)
         {
             delete model;
-            model=NULL;
+            model = NULL;
         }
         db.close();
     }
@@ -43,41 +43,42 @@ void MainWindow::on_browse_button_clicked()
 {
     QString root_path;
     QString tmp;
-    switch (QOperatingSystemVersion::currentType()) {
+    switch (QOperatingSystemVersion::currentType())
+    {
     case QOperatingSystemVersion::MacOS:
         tmp = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
         break;
     default:
-        tmp="";
+        tmp = "";
         break;
     }
     qDebug() << tmp;
-    root_path = QFileDialog::getExistingDirectory(this, tr("Select Backup Location"),tmp);
+    root_path = QFileDialog::getExistingDirectory(this, tr("Select Backup Location"), tmp);
     qDebug() << root_path;
     ui->path_label->setText(root_path);
 }
 
 void MainWindow::on_open_button_clicked()
 {
-    QString dbpath = ui->path_label->text() +"/Manifest.db";
-    qDebug()<< dbpath;
-    if(QFileInfo::exists(dbpath))
+    QString dbpath = ui->path_label->text() + "/Manifest.db";
+    qDebug() << dbpath;
+    if (QFileInfo::exists(dbpath))
     {
-        if(db.isOpen())
+        if (db.isOpen())
         {
-            if(NULL!=model)
+            if (NULL != model)
             {
                 delete model;
-                model=NULL;
+                model = NULL;
             }
             db.close();
         }
         db.setDatabaseName(dbpath);
-        if(db.open())
+        if (db.open())
         {
-            model=new QSqlTableModel(NULL,db);
+            model = new QSqlTableModel(NULL, db);
             model->setTable("Files");
-            if(model->select())
+            if (model->select())
             {
                 ui->table_view->setModel(model);
             }
@@ -114,25 +115,25 @@ void MainWindow::on_open_button_clicked()
 
 void MainWindow::on_table_view_doubleClicked(const QModelIndex &index)
 {
-    QVariant fileID = index.sibling(index.row(),0).data();
+    QVariant fileID = index.sibling(index.row(), 0).data();
     qDebug() << fileID.toString();
-    QVariant relativePath = index.sibling(index.row(),2).data();
+    QVariant relativePath = index.sibling(index.row(), 2).data();
     qDebug() << relativePath.toString();
-    QVariant flags = index.sibling(index.row(),3).data();
+    QVariant flags = index.sibling(index.row(), 3).data();
     qDebug() << flags.toUInt();
 
-    if(1==flags.toUInt())
+    if (1 == flags.toUInt())
     {
-        QString backupfilepath = ui->path_label->text()+"/"+fileID.toString()[0]+fileID.toString()[1]+"/"+fileID.toString();
+        QString backupfilepath = ui->path_label->text() + "/" + fileID.toString()[0] + fileID.toString()[1] + "/" + fileID.toString();
         qDebug() << backupfilepath;
-        if(QFileInfo(backupfilepath).exists())
+        if (QFileInfo(backupfilepath).exists())
         {
-            QString savepath=QFileDialog::getExistingDirectory(this, tr("Select Save Location"));
+            QString savepath = QFileDialog::getExistingDirectory(this, tr("Select Save Location"));
             QFileInfo fileinfo(relativePath.toString());
-            QString filename=fileinfo.fileName();
-            savepath+="/"+filename;
+            QString filename = fileinfo.fileName();
+            savepath += "/" + filename;
             qDebug() << savepath;
-            QFile::copy(backupfilepath,savepath);
+            QFile::copy(backupfilepath, savepath);
         }
         else
         {
