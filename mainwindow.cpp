@@ -45,7 +45,7 @@ void MainWindow::on_browse_button_clicked()
     QString tmp;
     switch (QOperatingSystemVersion::currentType()) {
     case QOperatingSystemVersion::MacOS:
-        tmp = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        tmp = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
         break;
     default:
         tmp="";
