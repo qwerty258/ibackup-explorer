@@ -22,6 +22,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->table_view->setEditTriggers(QTableView::NoEditTriggers);
     ui->table_view->setSortingEnabled(true);
+    QString tmp;
+    switch (QOperatingSystemVersion::currentType())
+    {
+    case QOperatingSystemVersion::MacOS:
+        tmp = QStandardPaths::writableLocation(QStandardPaths::RuntimeLocation);
+        break;
+    default:
+        tmp = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        break;
+    }
+    ui->path_label->setText(tmp);
     db = QSqlDatabase::addDatabase("QSQLITE");
 }
 
@@ -42,17 +53,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_browse_button_clicked()
 {
     QString root_path;
-    QString tmp;
-    switch (QOperatingSystemVersion::currentType())
-    {
-    case QOperatingSystemVersion::MacOS:
-        tmp = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-        break;
-    default:
-        tmp = "";
-        break;
-    }
-    qDebug() << tmp;
+    QString tmp = ui->path_label->text();
     root_path = QFileDialog::getExistingDirectory(this, tr("Select Backup Location"), tmp);
     qDebug() << root_path;
     ui->path_label->setText(root_path);
