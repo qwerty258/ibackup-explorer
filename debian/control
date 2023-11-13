@@ -1,0 +1,11 @@
+Source: ibackup-explorer
+Section: unknown
+Maintainer: yaofei <zyf26256@gmail.com>
+Priority: optional
+Build-Depends: debhelper (>= 9), 
+
+Package: ibackup-explorer
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: A tool to help you with chinese idioms.
+
