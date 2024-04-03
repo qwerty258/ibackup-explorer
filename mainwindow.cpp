@@ -5,15 +5,10 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include <QSqlDatabase>
-#include <QSqlTableModel>
 #include <QSqlError>
 
 #include <QStandardPaths>
 #include <QOperatingSystemVersion>
-
-QSqlDatabase db;
-QSqlTableModel *model;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -33,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
         break;
     }
     ui->path_label->setText(tmp);
+    model = nullptr;
     db = QSqlDatabase::addDatabase("QSQLITE");
 }
 
@@ -67,10 +63,10 @@ void MainWindow::on_open_button_clicked()
     {
         if (db.isOpen())
         {
-            if (NULL != model)
+            if (nullptr != model)
             {
                 delete model;
-                model = NULL;
+                model = nullptr;
             }
             db.close();
         }
@@ -152,5 +148,15 @@ void MainWindow::on_table_view_doubleClicked(const QModelIndex &index)
         msgbox.setText("The record selected is not a file");
         msgbox.setStandardButtons(QMessageBox::Ok);
         msgbox.exec();
+    }
+}
+
+void MainWindow::on_push_button_search_clicked()
+{
+    QString keywrod = ui->line_edit_search_keyword->text().trimmed().remove('\r').remove('\n');;
+    if (nullptr != model)
+    {
+        model->setFilter("domain LIKE '%" + keywrod + "%'");
+        model->select();
     }
 }
