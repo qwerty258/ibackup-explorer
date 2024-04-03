@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=ibackup-explorer
+Exec=/opt/ibackup-explorer/bin/ibackup-explorer
+Icon=ibackup-explorer
+Terminal=false
+Type=Application
