@@ -22,9 +22,9 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="label_database_path">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -46,7 +46,7 @@
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="text">
-       <string>browse</string>
+       <string>Browse</string>
       </property>
      </widget>
     </item>
@@ -59,7 +59,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>open</string>
+       <string>Open</string>
       </property>
      </widget>
     </item>
@@ -78,6 +78,12 @@
     </item>
     <item row="0" column="1">
      <widget class="QLabel" name="path_label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
        <string>selected path</string>
       </property>
@@ -96,8 +102,21 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="3">
+    <item row="1" column="1" colspan="2">
      <widget class="QLineEdit" name="line_edit_search_keyword"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_search_domain">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Search in Domain:</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -111,7 +130,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
