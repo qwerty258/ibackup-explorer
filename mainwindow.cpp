@@ -124,7 +124,7 @@ void MainWindow::on_table_view_doubleClicked(const QModelIndex &index)
     {
         QString backupfilepath = ui->path_label->text() + "/" + fileID.toString()[0] + fileID.toString()[1] + "/" + fileID.toString();
         qDebug() << backupfilepath;
-        if (QFileInfo(backupfilepath).exists())
+        if (QFileInfo::exists(backupfilepath))
         {
             QString savepath = QFileDialog::getExistingDirectory(this, tr("Select Save Location"));
             QFileInfo fileinfo(relativePath.toString());
