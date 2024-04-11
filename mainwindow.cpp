@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dialog_about.h"
 
 #include <QDebug>
 #include <QFileDialog>
@@ -158,5 +159,15 @@ void MainWindow::on_push_button_search_clicked()
     {
         model->setFilter("domain LIKE '%" + keywrod + "%'");
         model->select();
+    }
+}
+
+void MainWindow::on_action_about_triggered()
+{
+    dialog_about * p_about = new dialog_about(this);
+    if (nullptr != p_about)
+    {
+        p_about->exec();
+        delete p_about;
     }
 }
