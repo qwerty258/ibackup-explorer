@@ -10,7 +10,7 @@ dialog_about::dialog_about(QWidget *parent) :
     ui->setupUi(this);
     ui->label_version->setText(QString("\nBased On QT Version: ") + qVersion());
     QString copyright = "MIT License\n\n";
-    copyright += QString("Copyright (c) ") + QString::number(QDateTime::currentDateTime().date().year()) + " yaofei zheng\n\n";
+    copyright += QString("Copyright (c) 2021-") + QString::number(QDateTime::currentDateTime().date().year()) + " yaofei zheng\n\n";
     copyright += QString("Permission is hereby granted, free of charge, to any person obtaining a copy ") +
                  "of this software and associated documentation files (the \"Software\"), to deal " +
                  "in the Software without restriction, including without limitation the rights " +
